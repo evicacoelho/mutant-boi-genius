@@ -1,0 +1,110 @@
+.post-container {
+  background-color: #1c1c1c;
+  border: 1px solid #000;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  padding: 24px;
+  margin-bottom: 24px;
+  transition: all 0.3s ease;
+  max-width: 800px;
+}
+
+.post-container:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  transform: translateY(-2px);
+}
+
+.post-title {
+  font-size: 1.0rem;
+  font-weight: 500;
+  color: #2d3748;
+  margin: 0 0 8px 0;
+  line-height: 1.0;
+}
+
+.post-date {
+  font-size: 0.875rem;
+  color: #f00;
+  margin: 0 0 20px 0;
+  font-weight: 400;
+}
+
+.post-preview {
+  color: #ffffff;
+  line-height: 1.6;
+  margin: 0 0 20px 0;
+  font-size: 1rem;
+}
+
+.post-preview p {
+  margin: 0 0 12px 0;
+}
+
+.post-preview p:last-child {
+  margin-bottom: 0;
+}
+
+.tags-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.tag {
+  background-color: #edf2f7;
+  color: #4a5568;
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.tag:hover {
+  background-color: #e2e8f0;
+  transform: translateY(-1px);
+}
+
+/* Optional: Different tag colors based on category */
+.tag-design {
+  background-color: #ebf8ff;
+  color: #2b6cb0;
+}
+
+.tag-tattoo {
+  background-color: #faf5ff;
+  color: #6b46c1;
+}
+
+.tag-painting {
+  background-color: #f0fff4;
+  color: #2f855a;
+}
+
+.tag-photography {
+  background-color: #123800;
+  color: #26dd20;
+}
+
+.tag-audio {
+  background-color: #ff8c8c;
+  color: #530000;
+}
+
+.tag-av {
+  background-color: #493102;
+  color: #fff34e;
+}
+
+.tag-essays {
+  background-color: #000000;
+  color: #ffffff;
+}
+
+.tag-resources {
+  background-color: #fffaf0;
+  color: #000000;
+}

@@ -1,0 +1,416 @@
+.post-page {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+  background: #fff;
+  min-height: 100vh;
+}
+
+.post-header {
+  margin-bottom: 3rem;
+  padding-bottom: 2rem;
+  border-bottom: 2px solid #f1f3f4;
+}
+
+.back-button {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  background: #f8f9fa;
+  color: #333;
+  text-decoration: none;
+  border-radius: 6px;
+  border: 1px solid #dadce0;
+  transition: background-color 0.2s ease;
+  margin-bottom: 2rem;
+}
+
+.back-button:hover {
+  background: #e8eaed;
+  text-decoration: none;
+  color: #333;
+}
+
+.post-meta {
+  text-align: center;
+}
+
+.post-title {
+  font-size: 3rem;
+  color: #1a1a1a;
+  margin-bottom: 1rem;
+  line-height: 1.2;
+}
+
+.post-info {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-bottom: 1.5rem;
+  color: #666;
+  font-size: 1.1rem;
+}
+
+.post-tags {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.tag {
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.tag-art {
+  background: #e8f5e8;
+  color: #2e7d32;
+}
+
+.tag-technology {
+  background: #e3f2fd;
+  color: #1565c0;
+}
+
+.tag-design {
+  background: #fce4ec;
+  color: #c2185b;
+}
+
+/* Post Content Styles */
+.post-content {
+  line-height: 1.8;
+  font-size: 1.1rem;
+  color: #333;
+}
+
+.post-article {
+  max-width: 100%;
+  text-align: left; /* Force all text to be left-aligned */
+}
+
+/* Reset any inherited text-align from parent */
+.post-article * {
+  text-align: left;
+}
+
+.post-article h1 {
+  font-size: 2.5rem;
+  color: #1a1a1a;
+  margin: 2rem 0 1rem 0;
+  line-height: 1.3;
+}
+
+.post-article h2 {
+  font-size: 2rem;
+  color: #2a2a2a;
+  margin: 2.5rem 0 1rem 0;
+  border-bottom: 2px solid #f1f3f4;
+  padding-bottom: 0.5rem;
+}
+
+.post-article h3 {
+  font-size: 1.5rem;
+  color: #333;
+  margin: 2rem 0 1rem 0;
+}
+
+.post-article p {
+  margin-bottom: 1.5rem;
+  text-align: left; /* Change from justify to left */
+  hyphens: auto; /* Optional: better word breaking */
+}
+
+.post-article ul,
+.post-article ol {
+  margin: 1.5rem 0;
+  padding-left: 2rem;
+}
+
+.post-article li {
+  margin-bottom: 0.5rem;
+}
+
+.post-article blockquote {
+  border-left: 4px solid #4285f4;
+  margin: 2rem 0;
+  padding: 1rem 1.5rem;
+  background: #f8f9fa;
+  font-style: italic;
+  color: #555;
+  font-size: 1.2rem;
+  text-align: left;
+}
+
+.post-article pre {
+  background: #1a1a1a;
+  color: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 8px;
+  overflow-x: auto;
+  margin: 1.5rem 0;
+  text-align: left;
+  font-family: 'Courier New', monospace;
+  font-size: 0.9rem;
+}
+
+.post-article code {
+  background: #f1f3f4;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.9em;
+}
+
+/* Embedded Content Styles */
+.embedded-media {
+  margin: 2rem 0;
+  text-align: center !important; /* Important to override parent */
+}
+
+.embedded-image {
+  margin: 2rem 0;
+  text-align: center !important;
+}
+
+.embedded-image img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  display: block;
+  margin: 0 auto;
+}
+
+.image-caption,
+.media-caption,
+.video-caption,
+.audio-caption {
+  margin-top: 0.5rem;
+  font-style: italic;
+  color: #666;
+  text-align: center !important;
+  font-size: 0.9rem;
+}
+
+.video-embed {
+  margin: 2rem 0;
+  text-align: center !important;
+}
+
+.video-wrapper {
+  position: relative;
+  padding-bottom: 56.25%; /* 16:9 aspect ratio */
+  height: 0;
+  overflow: hidden;
+  border-radius: 12px;
+  background: #000;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.video-wrapper iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  border-radius: 12px;
+  display: block;
+}
+
+.audio-embed {
+  margin: 2rem 0;
+  text-align: center !important;
+}
+
+.audio-embed audio {
+  width: 100%;
+  max-width: 500px;
+  display: block;
+  margin: 0 auto;
+}
+
+/* Special selectors to ensure media stays centered */
+.post-article .embedded-media,
+.post-article .embedded-image,
+.post-article .video-embed,
+.post-article .audio-embed,
+.post-article .video-wrapper,
+.post-article .media-caption,
+.post-article .image-caption,
+.post-article .video-caption,
+.post-article .audio-caption {
+  text-align: center !important;
+}
+
+/* Force center alignment for specific media containers */
+.post-article div[class*="embedded"],
+.post-article div[class*="embed"] {
+  text-align: center !important;
+}
+
+.post-article div[class*="embedded"] *,
+.post-article div[class*="embed"] * {
+  text-align: center !important;
+}
+
+/* Post Footer */
+.post-footer {
+  margin-top: 4rem;
+  padding-top: 2rem;
+  border-top: 2px solid #f1f3f4;
+}
+
+.post-navigation {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 3rem;
+}
+
+.nav-button {
+  padding: 1rem 2rem;
+  background: #a41010;
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: background-color 0.2s ease;
+  font-weight: 600;
+}
+
+.nav-button:hover {
+  background: #f00;
+  text-decoration: none;
+  color: white;
+}
+
+.post-comments {
+  background: #f8f9fa;
+  padding: 2rem;
+  border-radius: 12px;
+}
+
+.post-comments h3 {
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.comments-placeholder {
+  text-align: center;
+  color: #666;
+  font-style: italic;
+  padding: 2rem;
+}
+
+.special-elite-regular {
+  font-family: "Special Elite", system-ui;
+  font-weight: 400;
+  font-style: normal;
+}
+
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .post-page {
+    padding: 1rem;
+  }
+
+  .post-title {
+    font-size: 2rem;
+  }
+
+  .post-info {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .post-navigation {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .nav-button {
+    text-align: center;
+  }
+
+  .post-article h1 {
+    font-size: 1.8rem;
+  }
+
+  .post-article h2 {
+    font-size: 1.5rem;
+  }
+
+  .post-article h3 {
+    font-size: 1.3rem;
+  }
+
+  .post-article:link {
+    color: #f00;
+  }
+
+  .post-article:visited {
+    color: #a41010;
+  }
+
+  .post-article:hover {
+    text-decoration: underline;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .post-page {
+    background: #1a1a1a;
+    color: #e0e0e0;
+  }
+
+  .post-title {
+    color: #ffffff;
+  }
+
+  .post-article {
+    color: #e0e0e0;
+  }
+
+  .post-article h1,
+  .post-article h2,
+  .post-article h3 {
+    color: #ffffff;
+  }
+
+  .post-article blockquote {
+    background: #2a2a2a;
+    color: #ddd;
+    border-left-color: #667eea;
+  }
+
+  .post-article code {
+    background: #2a2a2a;
+    color: #f8f9fa;
+  }
+
+  .back-button {
+    background: #333;
+    color: #000000;
+    border-color: #444;
+  }
+
+  .back-button:hover {
+    background: #444;
+  }
+
+  .post-comments {
+    background: #2a2a2a;
+  }
+
+  .image-caption,
+  .media-caption,
+  .video-caption,
+  .audio-caption {
+    color: #aaa;
+  }
+}

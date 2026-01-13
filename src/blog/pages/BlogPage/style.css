@@ -1,0 +1,162 @@
+.blog-page {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.blog-header {
+  position: relative;
+  text-align: center;
+  padding: 2rem 0;
+  margin-bottom: 2rem;
+  border-bottom: 2px solid #f1f3f4;
+}
+
+.create-post-button {
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
+  padding: 0.75rem 1.5rem;
+  background: #a41010;
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: background-color 0.2s ease;
+}
+
+.create-post-button:hover {
+  background: #f00;
+  text-decoration: none;
+  color: white;
+}
+
+.blog-header h1 {
+  font-size: 5rem;
+  font-weight: 400;
+  color: #fff;
+  margin: 0 0 12px 0;
+  text-shadow: -3px -3px 0 #000, -3px 3px 0 #000, 3px -3px 0 #000, 3px 3px 0 #000;
+}
+
+.rubik-burned-regular {
+  font-family: "Rubik Burned", system-ui;
+  font-weight: 400;
+  font-style: normal;
+}
+
+
+.blog-header p {
+  font-size: 1.125rem;
+  color: #718096;
+  margin: 0;
+}
+
+.posts-container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  padding: 2rem;
+}
+
+.loading-spinner {
+  font-size: 1.125rem;
+  color: #718096;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.loading-spinner::before {
+  content: '';
+  width: 20px;
+  height: 20px;
+  border: 2px solid #e2e8f0;
+  border-top-color: #4299e1;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.error-container {
+  text-align: center;
+  padding: 3rem 1rem;
+  background: #fed7d7;
+  border-radius: 8px;
+  margin: 2rem 0;
+}
+
+.error-message {
+  color: #742a2a;
+  margin-bottom: 1rem;
+  font-size: 1.125rem;
+}
+
+.retry-button,
+.clear-search-button {
+  padding: 0.75rem 1.5rem;
+  background: #4299e1;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.retry-button:hover,
+.clear-search-button:hover {
+  background: #3182ce;
+}
+
+.no-posts {
+  text-align: center;
+  padding: 4rem 1rem;
+  color: #718096;
+}
+
+.no-posts p {
+  margin-bottom: 1rem;
+  font-size: 1.125rem;
+}
+
+.rubik-spray-paint-regular {
+  font-family: "Rubik Spray Paint", system-ui;
+  font-weight: 400;
+  font-style: normal;
+}
+
+
+
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .blog-page {
+    padding: 20px 16px;
+  }
+  
+  .blog-header {
+    margin-bottom: 32px;
+    padding: 1rem 0;
+  }
+  
+  .blog-header h1 {
+    font-size: 2rem;
+  }
+
+  .create-post-button {
+    position: top;
+    display: inline-block;
+    margin-top: 1rem;
+  }
+}

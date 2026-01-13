@@ -1,0 +1,112 @@
+/* Background image for the entire app */
+.app-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -2;
+  overflow: hidden;
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.background-image {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  max-width: 75%;
+  max-height: 100%;
+  width: 2245px;
+  height: 1587px;
+  object-fit: cover;
+  object-position: top;
+  pointer-events: none;
+  color: #000;
+}
+
+/* Blur overlay for content areas */
+.background-blur {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  pointer-events: none;
+}
+
+/* Ensure content sits above background */
+.App {
+  color: #000;
+  background-color: #000; /* Add this line */
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+}
+
+/* Optional: Add a subtle overlay for better text readability */
+.background-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  background: rgba(0, 0, 0, 0.7); 
+  pointer-events: none;
+}
+
+/* For dark theme support */
+.dark-theme .background-overlay {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+/* Add smooth transitions */
+* {
+  transition: background-color 0.3s ease;
+}
+
+
+:root {
+  --bg-blur-amount: 0px;
+  --content-opacity: 0.85;
+  --overlay-opacity: 0.65;
+  --border-opacity: 0.8;
+}
+
+/* Use the variables */
+.background-blur {
+  backdrop-filter: blur(var(--bg-blur-amount));
+}
+
+.blog-content {
+  background: rgba(0, 0, 0, var(--content-opacity));
+}
+
+.background-overlay {
+  background: rgba(0, 0, 0, var(--overlay-opacity));
+}
+
+.blog-header {
+  border-bottom: 2px solid rgba(241, 243, 244, var(--border-opacity));
+}
+
+/* Optimize background rendering */
+.background-image {
+  will-change: transform;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+}
+
+/* Hardware acceleration for blur */
+.background-blur,
+.blog-header,
+.blog-content,
+.post-header,
+.post-content {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}

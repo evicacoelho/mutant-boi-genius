@@ -1,0 +1,253 @@
+.coffee-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+  padding: 1rem;
+}
+
+.coffee-modal {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  width: 100%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: modalSlideIn 0.3s ease-out;
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 1.5rem 1rem;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.modal-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #2d3748;
+  margin: 0;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #a0aec0;
+  cursor: pointer;
+  padding: 0.5rem;
+  line-height: 1;
+  transition: color 0.2s ease;
+}
+
+.modal-close:hover {
+  color: #718096;
+}
+
+.modal-content {
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.coffee-icon {
+  font-size: 4rem;
+  margin-bottom: 1.5rem;
+  animation: coffeeFloat 2s ease-in-out infinite;
+}
+
+@keyframes coffeeFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.coffee-description {
+  margin-bottom: 2rem;
+}
+
+.main-text {
+  font-size: 1.1rem;
+  color: #4a5568;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+.considerations {
+  text-align: left;
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border-left: 4px solid #a41010;
+}
+
+.considerations h3 {
+  color: #2d3748;
+  margin: 0 0 0.75rem 0;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.considerations-list {
+  margin: 0;
+  padding-left: 1.25rem;
+}
+
+.considerations-list li {
+  color: #718096;
+  line-height: 1.6;
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+}
+
+.donation-note {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background: #fff7e6;
+  border-radius: 8px;
+  border: 1px solid #a41010;
+}
+
+.donation-note p {
+  color: #a41010;
+  font-style: italic;
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.donation-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin: 2rem 0;
+}
+
+.btn-primary,
+.btn-secondary {
+  padding: 0.75rem 2rem;
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+  min-width: 120px;
+}
+
+.btn-primary {
+  background: #a41010;
+  color: white;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: #f00;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(230, 179, 37, 0.3);
+}
+
+.btn-primary:disabled {
+  background: #cbd5e0;
+  cursor: not-allowed;
+}
+
+.btn-secondary {
+  background: #e2e8f0;
+  color: #4a5568;
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: #cbd5e0;
+}
+
+.btn-secondary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.donate-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.donate-btn::before {
+  content: "☕";
+  font-size: 1rem;
+}
+
+.alternative-donation {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #e9ecef;
+}
+
+.alternative-text {
+  font-size: 0.875rem;
+  color: #718096;
+  margin: 0;
+}
+
+.contact-link-btn {
+  background: none;
+  border: none;
+  color: #a41010;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0;
+  font-size: 0.875rem;
+  font-family: inherit;
+  text-decoration: underline;
+  transition: color 0.2s ease;
+}
+
+.contact-link-btn:hover {
+  color: #f00;
+  text-decoration: none;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .coffee-modal {
+    max-height: 85vh;
+  }
+  
+  .modal-header,
+  .modal-content {
+    padding: 1.25rem;
+  }
+  
+  .donation-actions {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .btn-primary,
+  .btn-secondary {
+    width: 100%;
+  }
+  
+  .coffee-icon {
+    font-size: 3rem;
+  }
+}
