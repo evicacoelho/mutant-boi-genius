@@ -70,41 +70,41 @@
 
 /* Optional: Different tag colors based on category */
 .tag-design {
-  background-color: #ebf8ff;
-  color: #2b6cb0;
+  background-color: #fff;
+  color: #a41010;
 }
 
 .tag-tattoo {
-  background-color: #faf5ff;
-  color: #6b46c1;
+  background-color: #fff;
+  color: #a41010;
 }
 
 .tag-painting {
-  background-color: #f0fff4;
-  color: #2f855a;
+  background-color: #fff;
+  color: #a41010;
 }
 
 .tag-photography {
-  background-color: #123800;
-  color: #26dd20;
+  background-color: #fff;
+  color: #a41010;
 }
 
 .tag-audio {
-  background-color: #ff8c8c;
-  color: #530000;
+  background-color: #fff;
+  color: #a41010;
 }
 
 .tag-av {
-  background-color: #493102;
-  color: #fff34e;
+  background-color: #fff;
+  color: #a41010;
 }
 
 .tag-essays {
-  background-color: #000000;
-  color: #ffffff;
+  background-color: #fff;
+  color: #a41010;
 }
 
 .tag-resources {
-  background-color: #fffaf0;
-  color: #000000;
+  background-color: #fff;
+  color: #a41010;
 }

@@ -32,13 +32,13 @@
 .category-title {
   font-size: 2.5rem;
   font-weight: 700;
-  color: #2d3748;
+  color: #ffffff;
   margin: 0 0 12px 0;
 }
 
 .category-description {
   font-size: 1.125rem;
-  color: #718096;
+  color: #ffffff;
   margin: 0;
 }
 
@@ -49,14 +49,14 @@
 
 .no-posts p {
   font-size: 1.25rem;
-  color: #718096;
+  color: #fff;
   margin-bottom: 1.5rem;
 }
 
 .browse-all {
   display: inline-block;
   padding: 0.75rem 1.5rem;
-  background: #4285f4;
+  background: #a41010;
   color: white;
   text-decoration: none;
   border-radius: 8px;
@@ -65,7 +65,7 @@
 }
 
 .browse-all:hover {
-  background: #3367d6;
+  background: #f00;
   text-decoration: none;
   color: white;
 }
