@@ -29,18 +29,19 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch, className = '' }) => {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
         />
-        <button type="submit" className="search-button">
-          🔍
-        </button>
         {query && (
           <button 
             type="button" 
             className="clear-button"
             onClick={handleClear}
+            aria-label="Clear search"
           >
             ✕
           </button>
         )}
+        <button type="submit" className="search-button" aria-label="Search">
+          🔍 Search
+        </button>
       </form>
     </div>
   );

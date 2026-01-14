@@ -160,3 +160,13 @@
     margin-top: 1rem;
   }
 }
+
+@media (max-width: 768px) {
+  .blog-content {
+    padding-bottom: 80px; /* Make space for the mobile toggle button */
+  }
+  
+  .posts-container {
+    padding: 0 16px;
+  }
+}
