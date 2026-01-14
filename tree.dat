@@ -1,0 +1,111 @@
+.
+├── backend
+│   ├── .env
+│   ├── .env.example
+│   ├── .gitignore
+│   ├── node_modules
+│   ├── package.json
+│   ├── package-lock.json
+│   ├── server.js
+│   ├── src
+│   │   ├── config
+│   │   │   └── database.js
+│   │   ├── controllers
+│   │   │   ├── authController.js
+│   │   │   ├── contactController.js
+│   │   │   └── postController.js
+│   │   ├── middleware
+│   │   │   ├── auth.js
+│   │   │   └── errorHandler.js
+│   │   ├── models
+│   │   │   ├── ContactMessage.js
+│   │   │   ├── Post.js
+│   │   │   └── User.js
+│   │   ├── routes
+│   │   │   ├── auth.js
+│   │   │   ├── contact.js
+│   │   │   └── posts.js
+│   │   └── utils
+│   │       ├── emailService.js
+│   │       └── slugGenerator.js
+│   └── test
+│       └── test-db.js
+├── frontend
+│   ├── .env
+│   ├── .env.local
+│   ├── .env.example
+│   ├── node_modules
+│   ├── package.json
+│   ├── package-lock.json
+│   ├── public
+│   │   ├── favicon.ico
+│   │   ├── index.html
+│   │   ├── logo192.png
+│   │   ├── logo512.png
+│   │   ├── manifest.json
+│   │   └── robots.txt
+│   ├── README.md
+│   ├── src
+│   │   ├── App.css
+│   │   ├── App.test.tsx
+│   │   ├── App.tsx
+│   │   ├── background.png
+│   │   ├── blog
+│   │   │   ├── components
+│   │   │   │   ├── ContactModal
+│   │   │   │   │   ├── index.tsx
+│   │   │   │   │   └── style.css
+│   │   │   │   ├── ContentEditor
+│   │   │   │   │   ├── index.tsx
+│   │   │   │   │   └── style.css
+│   │   │   │   ├── DonationModal
+│   │   │   │   │   ├── index.tsx
+│   │   │   │   │   └── style.css
+│   │   │   │   ├── Footer
+│   │   │   │   │   ├── index.tsx
+│   │   │   │   │   └── style.css
+│   │   │   │   ├── PostPreview
+│   │   │   │   │   ├── index.tsx
+│   │   │   │   │   └── style.css
+│   │   │   │   ├── RequireAuth
+│   │   │   │   │   ├── index.tsx
+│   │   │   │   │   └── style.css
+│   │   │   │   ├── SearchBar
+│   │   │   │   │   ├── index.tsx
+│   │   │   │   │   └── style.css
+│   │   │   │   └── SideMenu
+│   │   │   │       ├── index.tsx
+│   │   │   │       └── style.css
+│   │   │   ├── data
+│   │   │   │   └── posts.ts
+│   │   │   └── pages
+│   │   │       ├── BlogPage
+│   │   │       │   ├── index.tsx
+│   │   │       │   └── style.css
+│   │   │       ├── CategoryPage
+│   │   │       │   ├── index.tsx
+│   │   │       │   └── style.css
+│   │   │       ├── PostCreation
+│   │   │       │   ├── index.tsx
+│   │   │       │   └── style.css
+│   │   │       └── PostPage
+│   │   │           ├── index.tsx
+│   │   │           └── style.css
+│   │   ├── env.dt.ts
+│   │   ├── hooks
+│   │   │   └── usePosts.ts
+│   │   ├── index.css
+│   │   ├── index.tsx
+│   │   ├── logo.svg
+│   │   ├── react-app-env.d.ts
+│   │   ├── reportWebVitals.ts
+│   │   ├── services
+│   │   │   └── api.ts
+│   │   ├── setupTests.ts
+│   │   ├── types
+│   │   │   └── index.ts
+│   │   └── utils
+│   │       └── dateutils.ts
+│   ├── tsconfig.json
+│   └── yarn.lock
+└── tree.dat
