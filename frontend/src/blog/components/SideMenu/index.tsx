@@ -111,7 +111,16 @@ const SideMenu: React.FC<SideMenuProps> = ({ items, className = '' }) => {
     return totalHeight;
   };
 
-  const handleItemClick = (item: MenuItem) => {
+  const handleItemClick = (item: MenuItem, e?: React.MouseEvent) => {
+    if (e) {
+      e.stopPropagation();
+    }
+    
+    // If item has subItems on desktop, don't trigger onClick - use hover instead
+    if (!isMobile && item.subItems && item.subItems.length > 0) {
+      return; // Let hover handle submenu expansion
+    }
+    
     if (item.onClick) {
       item.onClick();
       if (isMobile) {
@@ -120,7 +129,16 @@ const SideMenu: React.FC<SideMenuProps> = ({ items, className = '' }) => {
     }
   };
 
-  const handleSubItemClick = (subItem: SubItem) => {
+  const handleSubItemClick = (subItem: SubItem, e?: React.MouseEvent) => {
+    if (e) {
+      e.stopPropagation();
+    }
+    
+    // If subItem has subSubItems on desktop, don't trigger onClick - use hover instead
+    if (!isMobile && subItem.subSubItems && subItem.subSubItems.length > 0) {
+      return; // Let hover handle submenu expansion
+    }
+    
     if (subItem.onClick) {
       subItem.onClick();
       if (isMobile) {
@@ -129,7 +147,11 @@ const SideMenu: React.FC<SideMenuProps> = ({ items, className = '' }) => {
     }
   };
 
-  const handleSubSubItemClick = (subSubItem: SubSubItem) => {
+  const handleSubSubItemClick = (subSubItem: SubSubItem, e?: React.MouseEvent) => {
+    if (e) {
+      e.stopPropagation();
+    }
+    
     if (subSubItem.onClick) {
       subSubItem.onClick();
       if (isMobile) {
@@ -173,7 +195,7 @@ const SideMenu: React.FC<SideMenuProps> = ({ items, className = '' }) => {
             >
               <div
                 className={`menu-item ${!(item.onClick || item.subItems) ? 'default-cursor' : ''}`}
-                onClick={() => !isMobile ? undefined : handleItemClick(item)}
+                onClick={(e) => handleItemClick(item, e)}
               >
                 {item.icon && (
                   <span className="menu-item-icon">
@@ -185,12 +207,15 @@ const SideMenu: React.FC<SideMenuProps> = ({ items, className = '' }) => {
                   <span className="menu-item-arrow">▶</span>
                 )}
                 {item.subItems && item.subItems.length > 0 && isMobile && (
-                  <span className="mobile-arrow" onClick={(e) => {
-                    e.stopPropagation();
-                    if (isMobile) {
-                      setHoveredItemId(hoveredItemId === item.id ? null : item.id);
-                    }
-                  }}>
+                  <span 
+                    className="mobile-arrow" 
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (isMobile) {
+                        setHoveredItemId(hoveredItemId === item.id ? null : item.id);
+                      }
+                    }}
+                  >
                     {hoveredItemId === item.id ? '▼' : '▶'}
                   </span>
                 )}
@@ -211,24 +236,22 @@ const SideMenu: React.FC<SideMenuProps> = ({ items, className = '' }) => {
                     >
                       <div
                         className={`subitem ${!subItem.onClick ? 'default-cursor' : ''}`}
-                        onClick={(e) => {
-                          if (isMobile) {
-                            e.stopPropagation();
-                            handleSubItemClick(subItem);
-                          }
-                        }}
+                        onClick={(e) => handleSubItemClick(subItem, e)}
                       >
                         <span className="subitem-label">{subItem.label}</span>
                         {subItem.subSubItems && subItem.subSubItems.length > 0 && !isMobile && (
                           <span className="subitem-arrow">▶</span>
                         )}
                         {subItem.subSubItems && subItem.subSubItems.length > 0 && isMobile && (
-                          <span className="mobile-arrow" onClick={(e) => {
-                            e.stopPropagation();
-                            if (isMobile) {
-                              setHoveredSubItemId(hoveredSubItemId === subItem.id ? null : subItem.id);
-                            }
-                          }}>
+                          <span 
+                            className="mobile-arrow" 
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              if (isMobile) {
+                                setHoveredSubItemId(hoveredSubItemId === subItem.id ? null : subItem.id);
+                              }
+                            }}
+                          >
                             {hoveredSubItemId === subItem.id ? '▼' : '▶'}
                           </span>
                         )}
@@ -245,12 +268,7 @@ const SideMenu: React.FC<SideMenuProps> = ({ items, className = '' }) => {
                             <div
                               key={subSubItem.id}
                               className={`subsubitem ${!subSubItem.onClick ? 'default-cursor' : ''}`}
-                              onClick={(e) => {
-                                if (isMobile) {
-                                  e.stopPropagation();
-                                  handleSubSubItemClick(subSubItem);
-                                }
-                              }}
+                              onClick={(e) => handleSubSubItemClick(subSubItem, e)}
                             >
                               {subSubItem.label}
                             </div>
