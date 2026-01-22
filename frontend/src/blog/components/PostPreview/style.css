@@ -108,3 +108,9 @@
   background-color: #fff;
   color: #a41010;
 }
+
+.special-elite-regular {
+  font-family: "Special Elite", system-ui;
+  font-weight: 400;
+  font-style: normal;
+}

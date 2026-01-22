@@ -65,7 +65,7 @@ const PostPreview: React.FC<PostProps> = ({
       onClick={onClick}
       style={{ cursor: onClick ? 'pointer' : 'default' }}
     >
-      <p className="post-title">{title}</p>
+      <p className="post-title special-elite-regular">{title}</p>
       <time className="post-date" dateTime={date.toISOString()}>
         {formatDate(date)}
       </time>

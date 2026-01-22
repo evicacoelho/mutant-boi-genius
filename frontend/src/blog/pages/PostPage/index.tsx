@@ -79,7 +79,7 @@ const PostPage: React.FC = () => {
         </div>
       </header>
 
-      <main className="post-content special-elite-regular">
+      <main className="post-content">
         <article 
           className="post-article"
           dangerouslySetInnerHTML={{ __html: post.content }}
