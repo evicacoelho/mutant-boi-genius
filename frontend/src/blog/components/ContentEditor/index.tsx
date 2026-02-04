@@ -273,12 +273,12 @@ const ContentEditor: React.FC<ContentEditorProps> = ({
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (disabled || !textareaRef.current) return;
     
+    const textarea = textareaRef.current;
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    
     if (e.key === 'Enter') {
       e.preventDefault();
-      
-      const textarea = textareaRef.current;
-      const start = textarea.selectionStart;
-      const end = textarea.selectionEnd;
       
       // Check if Shift is pressed for new paragraph
       if (e.shiftKey) {
@@ -316,7 +316,27 @@ const ContentEditor: React.FC<ContentEditorProps> = ({
           }
         }, 0);
       }
-    }
+    } else if (e.key === 'Tab') {
+    e.preventDefault();
+    
+    // Tab key - insert 4 non-breaking spaces
+    const tabSpaces = '&nbsp;&nbsp;&nbsp;&nbsp;';
+    const newValue = 
+      value.substring(0, start) + 
+      tabSpaces + 
+      value.substring(end);
+    
+    onChange(newValue);
+    
+    // Move cursor after the tab spaces
+    setTimeout(() => {
+      if (textareaRef.current) {
+        const cursorPos = start + tabSpaces.length;
+        textareaRef.current.selectionStart = cursorPos;
+        textareaRef.current.selectionEnd = cursorPos;
+      }
+    }, 0);
+  }
   };
 
   return (
