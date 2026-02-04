@@ -491,7 +491,7 @@ kbd {
 .preview-post-content .post-article {
   line-height: 1.8;
   font-size: 1.1rem;
-  color: #333;
+  color: #000;
   max-width: 100%;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
 }
@@ -677,7 +677,7 @@ kbd {
 /* Dark mode support for preview */
 @media (prefers-color-scheme: dark) {
   .preview-post-content .post-article {
-    color: #e0e0e0;
+    color: #000;
   }
   
   .preview-post-content .post-article h1,

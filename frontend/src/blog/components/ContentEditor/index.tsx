@@ -62,7 +62,7 @@ const ContentEditor: React.FC<ContentEditorProps> = ({
   };
 
   useEffect(() => {
-    if (textareaRef.current) {
+    if (textareaRef.current) {      
       textareaRef.current.style.height = 'auto';
       textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
     }
@@ -270,6 +270,55 @@ const ContentEditor: React.FC<ContentEditorProps> = ({
     );
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (disabled || !textareaRef.current) return;
+    
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      
+      const textarea = textareaRef.current;
+      const start = textarea.selectionStart;
+      const end = textarea.selectionEnd;
+      
+      // Check if Shift is pressed for new paragraph
+      if (e.shiftKey) {
+        // Insert <p></p> tags for new paragraph
+        const newValue = 
+          value.substring(0, start) + 
+          '\n<p></p>\n' + 
+          value.substring(end);
+        
+        onChange(newValue);
+        
+        // Place cursor between the paragraph tags
+        setTimeout(() => {
+          if (textareaRef.current) {
+            const cursorPos = start + 4; // Position after <p> (4 chars) + newline (1 char)
+            textareaRef.current.selectionStart = cursorPos;
+            textareaRef.current.selectionEnd = cursorPos;
+          }
+        }, 0);
+      } else {
+        // Regular Enter key - insert <br> tag
+        const newValue = 
+          value.substring(0, start) + 
+          '\n<br>' + 
+          value.substring(end);
+        
+        onChange(newValue);
+        
+        // Move cursor after the <br> tag
+        setTimeout(() => {
+          if (textareaRef.current) {
+            const cursorPos = start + 5;
+            textareaRef.current.selectionStart = cursorPos;
+            textareaRef.current.selectionEnd = cursorPos;
+          }
+        }, 0);
+      }
+    }
+  };
+
   return (
     <>
       <div className={`content-editor-container ${className} ${disabled ? 'content-editor-disabled' : ''}`}>
@@ -355,6 +404,7 @@ const ContentEditor: React.FC<ContentEditorProps> = ({
           className="editor-textarea"
           value={value}
           onChange={handleChange}
+          onKeyDown={handleKeyDown}
           placeholder={placeholder}
           disabled={disabled}
           style={{ resize: 'vertical', minHeight: '200px' }}

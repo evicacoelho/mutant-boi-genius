@@ -5,6 +5,7 @@ import './style.css';
 import { tagTypes } from '../../components/PostPreview';
 import { postsAPI } from '../../../services/api';
 import { Tag } from '../../../types';
+import BackgroundImage from '../../../background.png'
 
 interface PostData {
   title: string;
@@ -235,7 +236,7 @@ const PostCreation: React.FC = () => {
             id="featuredImage"
             value={postData.featuredImage || ''}
             onChange={(e) => setPostData(prev => ({ ...prev, featuredImage: e.target.value }))}
-            placeholder="https://example.com/image.jpg"
+            placeholder={BackgroundImage}
             disabled={isSubmitting}
           />
         </div>
