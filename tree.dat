@@ -1,9 +1,5 @@
 .
 ├── backend
-│   ├── .env
-│   ├── .env.example
-│   ├── .gitignore
-│   ├── node_modules
 │   ├── package.json
 │   ├── package-lock.json
 │   ├── server.js
@@ -31,10 +27,6 @@
 │   └── test
 │       └── test-db.js
 ├── frontend
-│   ├── .env
-│   ├── .env.local
-│   ├── .env.example
-│   ├── node_modules
 │   ├── package.json
 │   ├── package-lock.json
 │   ├── public
@@ -96,7 +88,6 @@
 │   │   │   └── usePosts.ts
 │   │   ├── index.css
 │   │   ├── index.tsx
-│   │   ├── logo.svg
 │   │   ├── react-app-env.d.ts
 │   │   ├── reportWebVitals.ts
 │   │   ├── services
@@ -108,4 +99,7 @@
 │   │       └── dateutils.ts
 │   ├── tsconfig.json
 │   └── yarn.lock
+├── README.md
 └── tree.dat
+
+4746 directories, 38163 files
