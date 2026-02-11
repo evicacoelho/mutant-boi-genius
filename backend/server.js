@@ -28,7 +28,12 @@ connectDB();
 // Middleware
 app.use(helmet()); // Security headers
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+  origin: [
+    process.env.FRONTEND_URL || 'http://localhost:3000',
+    'https://mutantboigenius.com',
+    'https://www.mutantboigenius.com', 
+    'https://mutant-boi-genius.onrender.com' 
+  ].filter(Boolean), // Remove undefined values
   credentials: true
 }));
 app.use(morgan('dev')); // Logging

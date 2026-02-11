@@ -9,8 +9,7 @@ import {
   ApiResponse 
 } from '../types';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
-
+const API_URL = process.env.REACT_APP_API_URL || 'https://mutant-boi-genius.onrender.com/api';
 // Helper function for API calls
 interface ApiRequestOptions extends RequestInit {
   headers?: Record<string, string>;
