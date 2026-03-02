@@ -86,39 +86,64 @@ const ContentEditor: React.FC<ContentEditorProps> = ({
     const end = textarea.selectionEnd;
     const selectedText = value.substring(start, end);
     
-    let formattedText = '';
+    let tag = '';
+    let oppositeState = false;
     
     switch (format) {
       case 'bold':
-        formattedText = `<strong>${selectedText}</strong>`;
-        setIsBold(!isBold);
+        tag = 'strong';
+        oppositeState = !isBold;
+        setIsBold(oppositeState);
         break;
       case 'italic':
-        formattedText = `<em>${selectedText}</em>`;
-        setIsItalic(!isItalic);
+        tag = 'em';
+        oppositeState = !isItalic;
+        setIsItalic(oppositeState);
         break;
       case 'underline':
-        formattedText = `<u>${selectedText}</u>`;
-        setIsUnderline(!isUnderline);
+        tag = 'u';
+        oppositeState = !isUnderline;
+        setIsUnderline(oppositeState);
         break;
       case 'strike':
-        formattedText = `<s>${selectedText}</s>`;
-        setIsStrike(!isStrike);
+        tag = 's';
+        oppositeState = !isStrike;
+        setIsStrike(oppositeState);
         break;
     }
     
-    const newValue = value.substring(0, start) + formattedText + value.substring(end);
+    // Check if the selected text is already wrapped with this tag
+    const wrappedWithTag = selectedText.startsWith(`<${tag}>`) && selectedText.endsWith(`</${tag}>`);
+    
+    let newValue: string;
+    let cursorPos: number;
+    
+    if (wrappedWithTag) {
+      // Remove the tags
+      const innerText = selectedText.slice(tag.length + 2, -tag.length - 3);
+      newValue = value.substring(0, start) + innerText + value.substring(end);
+      cursorPos = start + innerText.length;
+    } else if (selectedText) {
+      // Wrap with tags
+      newValue = value.substring(0, start) + `<${tag}>${selectedText}</${tag}>` + value.substring(end);
+      cursorPos = start + selectedText.length + (tag.length * 2 + 5);
+    } else {
+      // Insert empty tags
+      newValue = value.substring(0, start) + `<${tag}></${tag}>` + value.substring(end);
+      cursorPos = start + tag.length + 2;
+    }
+    
     onChange(newValue);
     
     setTimeout(() => {
       if (textareaRef.current) {
-        const cursorPos = start + formattedText.length;
         textareaRef.current.selectionStart = cursorPos;
         textareaRef.current.selectionEnd = cursorPos;
         textareaRef.current.focus();
       }
     }, 0);
   };
+
 
   const openMediaModal = (type: 'image' | 'video' | 'audio') => {
     if (disabled) return;
@@ -281,10 +306,38 @@ const ContentEditor: React.FC<ContentEditorProps> = ({
     const textarea = textareaRef.current;
     const start = textarea.selectionStart;
     const end = textarea.selectionEnd;
+
+    if (e.ctrlKey) {
+    // Check which key was pressed
+    switch (e.key.toLowerCase()) {
+      case 'b':
+      case 'i':
+      case 'u':
+      case 's':
+        // Prevent browser default for all formatting shortcuts
+        e.preventDefault();
+        e.stopPropagation(); // Stop event from bubbling up
+        
+        // Call the appropriate formatting function
+        if (e.key === 'b') toggleFormatting('bold');
+        else if (e.key === 'i') toggleFormatting('italic');
+        else if (e.key === 'u') toggleFormatting('underline');
+        else if (e.key === 's') toggleFormatting('strike');
+        break;
+        
+      // You can add more shortcuts here
+      default:
+        // Don't prevent default for other Ctrl+key combinations
+        break;
+    }
+    
+    // Important: Return early to prevent Enter/Tab handling
+    return;
+  }
     
     if (e.key === 'Enter') {
       e.preventDefault();
-      
+
       // Check if Shift is pressed for new paragraph
       if (e.shiftKey) {
         // Insert <p></p> tags for new paragraph
