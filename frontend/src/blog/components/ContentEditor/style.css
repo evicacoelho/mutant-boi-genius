@@ -369,14 +369,14 @@ kbd {
 }
 
 .preview-btn {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #a41010 0%, #a0a24b 100%);
   color: white;
   font-weight: 500;
   padding: 0.5rem 1rem !important;
 }
 
 .preview-btn:hover:not(:disabled) {
-  background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+  background: linear-gradient(135deg, #f00 0%, #ff0 100%);
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
 }
@@ -428,7 +428,7 @@ kbd {
 
 .preview-modal-header {
   padding: 1.5rem 2rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #f00 0%, #ff0 100%);
   color: white;
   position: relative;
 }
@@ -556,7 +556,7 @@ kbd {
 }
 
 .preview-post-content .post-article blockquote {
-  border-left: 4px solid #667eea;
+  border-left: 4px solid #f00;
   margin: 2rem 0;
   padding: 1rem 1.5rem;
   background: #f8f9fa;
@@ -680,10 +680,15 @@ kbd {
     color: #000;
   }
   
-  .preview-post-content .post-article h1,
-  .preview-post-content .post-article h2,
+  .preview-post-content .post-article h1 {
+    font-size: 1.8rem;
+  }
+  .preview-post-content .post-article h2 {
+    font-size: 1.5rem;
+  }
+
   .preview-post-content .post-article h3 {
-    color: #ffffff;
+    font-size: 1.3rem;
   }
   
   .preview-post-content .post-article code {
