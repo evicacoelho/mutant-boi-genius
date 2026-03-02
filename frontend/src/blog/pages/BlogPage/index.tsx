@@ -1,6 +1,9 @@
+// frontend/src/pages/BlogPage/index.tsx
+
 import './style.css';
 import React, { useEffect, useState } from 'react';
 import PostPreview from '../../components/PostPreview';
+import FeaturedPost from '../../components/FeaturedPost'; // Create this component
 import SideMenu, { MenuItem } from '../../components/SideMenu';
 import SearchBar from '../../components/SearchBar';
 import { Link, useNavigate } from 'react-router-dom';
@@ -16,12 +19,12 @@ const BlogPage: React.FC = () => {
   const [isContactModalOpen, setIsContactModalOpen] = useState<boolean>(false);
   const [isDonationModalOpen, setIsDonationModalOpen] = useState<boolean>(false);
   const [searchQuery, setSearchQuery] = useState<string>('');
-
+  
   // Donation url
   const donationUrl = process.env.DONATION_URL || "https://ko-fi.com/mutantboigenius"
   
-  // Fetch posts with custom hook
-  const { posts, loading, error, refetch } = usePosts(undefined, searchQuery);
+  // Fetch posts with custom hook - now includes featuredPost
+  const { posts, featuredPost, loading, error, refetch } = usePosts(undefined, searchQuery);
   
   // Fetch categories
   const { categories } = useCategories();
@@ -40,6 +43,9 @@ const BlogPage: React.FC = () => {
   const handlePostClick = (postId: string, postTitle: string) => {
     navigate(`/blog/${postId}`);
   };
+
+  // Determine if we should show featured post
+  const showFeaturedPost = !searchQuery && featuredPost;
 
   // Build menu items from categories
   const buildMenuItems = (): MenuItem[] => {
@@ -100,10 +106,10 @@ const BlogPage: React.FC = () => {
         onClick: () => setIsContactModalOpen(true)
       },
       {
-      id: '5',
-      label: 'Buy me a Coffee',
-      icon: '☕',
-      onClick: () => setIsDonationModalOpen(true)
+        id: '5',
+        label: 'Buy me a Coffee',
+        icon: '☕',
+        onClick: () => setIsDonationModalOpen(true)
       }
     ];
 
@@ -139,7 +145,24 @@ const BlogPage: React.FC = () => {
           </div>
         ) : (
           <div className="posts-container">
-            {posts.length === 0 ? (
+            {/* Show featured post at the top when applicable */}
+            {showFeaturedPost && (
+              <div className="featured-post-section">
+                <FeaturedPost
+                  title={featuredPost.title}
+                  date={featuredPost.date as Date}
+                  preview={featuredPost.preview || featuredPost.excerpt}
+                  tags={featuredPost.tags}
+                  onClick={() => handlePostClick(featuredPost.slug, featuredPost.title)}
+                />
+                {posts.length > 0 && (
+                  <h3 className="recent-posts-label">↓ Keep Reading ↓</h3>
+                )}
+              </div>
+            )}
+            
+            {/* Regular posts */}
+            {posts.length === 0 && !showFeaturedPost ? (
               <div className="no-posts">
                 <p>No posts found. {searchQuery && 'Try a different search term.'}</p>
                 {searchQuery && (
@@ -155,9 +178,9 @@ const BlogPage: React.FC = () => {
               posts.map((post) => (
                 <PostPreview
                   key={post._id || post.id || `post-${post.slug}`}
-                  id={post._id || post.id} // This can be undefined now
+                  id={post._id || post.id}
                   title={post.title}
-                  date={post.date as Date} // Cast to Date since we transformed it
+                  date={post.date as Date}
                   preview={post.preview || post.excerpt}
                   tags={post.tags}
                   onClick={() => handlePostClick(post.slug, post.title)}

@@ -59,6 +59,10 @@ const postSchema = new mongoose.Schema({
   viewCount: {
     type: Number,
     default: 0
+  },
+  isFeatured: {
+    type: Boolean,
+    default: false
   }
 }, {
   timestamps: true

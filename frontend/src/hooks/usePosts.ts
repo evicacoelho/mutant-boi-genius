@@ -4,6 +4,7 @@ import { postsAPI } from '../services/api';
 
 export const usePosts = (category?: string, search?: string, page: number = 1, limit: number = 10) => {
   const [posts, setPosts] = useState<Post[]>([]);
+  const [featuredPost, setFeaturedPost] = useState<Post | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [totalPages, setTotalPages] = useState<number>(1);
@@ -14,30 +15,32 @@ export const usePosts = (category?: string, search?: string, page: number = 1, l
       setLoading(true);
       setError(null);
       
-      // Prepare query params - don't send undefined values
+      // Prepare query params
       const params: any = {
         page,
         limit
       };
       
       // Only add category if it's defined and not empty
-      if (category && category !== 'undefined') {
+      if (category && category !== 'undefined' && category !== '') {
         params.category = category;
+        params.includeFeatured = true; // Include featured when filtering by category
       }
       
       // Only add search if it's defined and not empty
       if (search && search.trim() !== '') {
         params.search = search;
+        params.includeFeatured = true; // Include featured when searching
       }
       
-      console.log('Fetching posts with params:', params); // Debug log
+      console.log('Fetching posts with params:', params);
       
       const response = await postsAPI.getAllPosts(params);
 
-      console.log('API response:', response); // Debug log
+      console.log('API response:', response);
 
-      // Transform backend posts to frontend format
-      const transformedPosts = response.posts.map(post => {
+      // Transform function for posts
+      const transformPost = (post: any): Post => {
         // Ensure we have a valid date
         let postDate: Date;
         if (post.publishedAt) {
@@ -47,11 +50,11 @@ export const usePosts = (category?: string, search?: string, page: number = 1, l
           const dateObj = new Date(post.date);
           postDate = isNaN(dateObj.getTime()) ? new Date() : dateObj;
         } else {
-          postDate = new Date(); // Fallback to current date
+          postDate = new Date();
         }
 
         // Ensure tags have proper structure
-        const transformedTags = post.tags.map(tag => ({
+        const transformedTags = post.tags.map((tag: any) => ({
           id: tag._id || tag.id || undefined,
           name: tag.name,
           type: tag.type
@@ -64,11 +67,21 @@ export const usePosts = (category?: string, search?: string, page: number = 1, l
           preview: post.excerpt,
           tags: transformedTags
         };
-      });
+      };
 
-      console.log('Transformed posts:', transformedPosts); // Debug log
+      // Transform posts
+      const transformedPosts = response.posts.map(transformPost);
+      
+      // Transform featured post if it exists
+      const transformedFeaturedPost = response.featuredPost 
+        ? transformPost(response.featuredPost)
+        : null;
+
+      console.log('Transformed posts:', transformedPosts);
+      console.log('Featured post:', transformedFeaturedPost);
       
       setPosts(transformedPosts);
+      setFeaturedPost(transformedFeaturedPost);
       setTotalPages(response.totalPages);
       setTotalPosts(response.totalPosts);
     } catch (error: any) {
@@ -87,7 +100,15 @@ export const usePosts = (category?: string, search?: string, page: number = 1, l
     fetchPosts();
   };
 
-  return { posts, loading, error, totalPages, totalPosts, refetch };
+  return { 
+    posts, 
+    featuredPost,  // Now returning featuredPost
+    loading, 
+    error, 
+    totalPages, 
+    totalPosts, 
+    refetch 
+  };
 };
 
 export const useCategories = () => {

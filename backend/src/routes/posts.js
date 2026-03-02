@@ -6,7 +6,8 @@ const {
   createPost,
   updatePost,
   deletePost,
-  getAllCategories
+  getAllCategories,
+  toggleFeatured,
 } = require('../controllers/postController');
 const { auth, isAdmin } = require('../middleware/auth');
 
@@ -19,5 +20,6 @@ router.get('/:slug', getPostBySlug);
 router.post('/', auth, isAdmin, createPost);
 router.put('/:id', auth, isAdmin, updatePost);
 router.delete('/:id', auth, isAdmin, deletePost);
+router.patch(':id/feature', auth, isAdmin, toggleFeatured)
 
 module.exports = router;

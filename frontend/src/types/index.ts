@@ -58,6 +58,7 @@ export interface ApiResponse<T> {
 
 export interface PaginatedResponse<T> {
   posts: T[];
+  featuredPost?: boolean
   totalPages: number;
   currentPage: number;
   totalPosts: number;

@@ -13,6 +13,7 @@ interface PostData {
   excerpt: string;
   tags: Tag[];
   featuredImage?: string;
+  isFeatured?: boolean;
 }
 
 const PostCreation: React.FC = () => {
@@ -239,6 +240,27 @@ const PostCreation: React.FC = () => {
             placeholder="https://example.com/image.jpg"
             disabled={isSubmitting}
           />
+        </div>
+
+        {/* Featured? */}
+        <div className="form-group">
+          <label className={`toggle-label ${isSubmitting ? 'disabled' : ''}`}>
+            <div className="toggle-switch">
+              <input
+                type="checkbox"
+                checked={postData.isFeatured || false}
+                onChange={(e) => setPostData(prev => ({ ...prev, isFeatured: e.target.checked }))}
+                disabled={isSubmitting}
+              />
+              <span className="toggle-slider"></span>
+            </div>
+            <span className="toggle-text">Feature this post</span>
+          </label>
+          {postData.isFeatured && (
+            <div className="feature-hint">
+              ⭐ This post will appear at the top of the blog page
+            </div>
+          )}
         </div>
 
         {/* Form Actions */}

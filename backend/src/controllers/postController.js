@@ -9,13 +9,20 @@ exports.getAllPosts = async (req, res) => {
       limit = 10, 
       category, 
       sort = '-publishedAt',
-      search 
+      search,
+      includeFeatured = false,
     } = req.query;
 
-    console.log('Query parameters:', { page, limit, category, sort, search }); // DEBUG
+    console.log('Query parameters:', { page, limit, category, sort, search, includeFeatured }); // DEBUG
 
     // Build query
     let query = { isPublished: true };
+
+     // If not including featured flag and not on category/search, handle featured separately
+    if (!includeFeatured && !category && !search) {
+      // For main page without filters, we'll handle featured post separately
+      query.isFeatured = { $ne: true }; // Exclude featured posts from regular listing
+    }
     
     // Filter by category
     if (category) {
@@ -42,6 +49,16 @@ exports.getAllPosts = async (req, res) => {
     // Get total count for pagination
     const total = await Post.countDocuments(query);
 
+    let featuredPost = null;
+    if (!category && !search && !includeFeatured) {
+      featuredPost = await Post.findOne({ 
+        isPublished: true, 
+        isFeatured: true 
+      })
+        .populate('author', 'displayName username')
+        .lean();
+    }
+
     console.log(`Found ${posts.length} posts, total: ${total}`); // DEBUG
 
     // Format response
@@ -51,11 +68,57 @@ exports.getAllPosts = async (req, res) => {
       preview: post.excerpt
     }));
 
+    const formattedFeaturedPost = featuredPost ? {
+      ...featuredPost,
+      date: featuredPost.publishedAt,
+      preview: featuredPost.excerpt
+    } : null;
+
     res.json({
       posts: formattedPosts,
+      featuredPost: formattedFeaturedPost,
       totalPages: Math.ceil(total / limit),
       currentPage: parseInt(page),
       totalPosts: total
+    });
+
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// Function to toggle featured status
+exports.toggleFeatured = async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    // Find the post
+    const post = await Post.findById(id);
+    
+    if (!post) {
+      return res.status(404).json({ error: 'Post not found' });
+    }
+
+    // Check if user is admin
+    if (req.user.role !== 'admin') {
+      return res.status(403).json({ error: 'Only admins can feature posts' });
+    }
+
+    // If setting this post as featured, remove featured from any other post
+    if (!post.isFeatured) {
+      await Post.updateMany(
+        { isFeatured: true },
+        { $set: { isFeatured: false } }
+      );
+    }
+
+    // Toggle the featured status
+    post.isFeatured = !post.isFeatured;
+    await post.save();
+
+    res.json({ 
+      message: `Post ${post.isFeatured ? 'featured' : 'unfeatured'} successfully`,
+      isFeatured: post.isFeatured 
     });
 
   } catch (error) {

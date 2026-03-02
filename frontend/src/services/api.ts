@@ -81,6 +81,7 @@ export const postsAPI = {
     limit?: number; 
     category?: string;
     search?: string;
+    includeFeatured? : boolean;
   }): Promise<PaginatedResponse<Post>> => {
     const query = new URLSearchParams(params as any).toString();
     return apiRequest(`/posts?${query}`);
@@ -108,6 +109,11 @@ export const postsAPI = {
 
   getAllCategories: (): Promise<Category[]> => 
     apiRequest('/posts/categories'),
+
+  toggleFeatured: (id: string): Promise<{ message: string; isFeatured: boolean }> => 
+    apiRequest(`/posts/${id}/feature`, {
+      method: 'PATCH',
+    }),
 };
 
 // Contact API
