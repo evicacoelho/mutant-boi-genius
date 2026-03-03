@@ -196,7 +196,8 @@
 }
 
 .recent-posts-label {
-  font-size: 1.25rem;
+  background-color: #1c1c1c;
+  font-size: 1.6rem;
   margin: 32px 0 24px 0;
   color: #ffffff;
   border-bottom: 2px solid #333;

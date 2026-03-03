@@ -59,7 +59,7 @@ const CategoryPage: React.FC = () => {
             </Link>
           </div>
         ) : (
-          <div className="posts-container">
+          <div className="post-container">
             {posts.map((post) => (
               <PostPreview
                 key={post._id || post.id || `post-${post.slug}`}

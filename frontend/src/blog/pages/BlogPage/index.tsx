@@ -156,7 +156,7 @@ const BlogPage: React.FC = () => {
                   onClick={() => handlePostClick(featuredPost.slug, featuredPost.title)}
                 />
                 {posts.length > 0 && (
-                  <h3 className="recent-posts-label">↓ Keep Reading ↓</h3>
+                  <h3 className="recent-posts-label"><center>↓ Keep Reading ↓</center></h3>
                 )}
               </div>
             )}
