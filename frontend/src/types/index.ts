@@ -8,6 +8,7 @@ export interface Tag {
 
 // Post interface
 export interface Post {
+  draftId?: string;
   _id?: string;
   id?: string;
   title: string;
@@ -28,6 +29,33 @@ export interface Post {
   // Frontend compatibility
   date?: Date | string;
   preview?: string;
+  isFeatured?: boolean;
+}
+
+// Draft interface (extends Post with draft-specific fields)
+export interface Draft extends Omit<Post, 'publishedAt'> {
+  isDraft: boolean;
+  lastAutoSaved?: Date | string;
+  draftId?: string;
+  publishedAt?: Date | string; 
+};
+
+// API response for draft operations
+export interface DraftResponse {
+  success: boolean;
+  post: Draft;
+  isDraft: boolean;
+  message: string;
+}
+
+export interface LatestDraftResponse {
+  success: boolean;
+  draft: Draft | null;
+}
+
+export interface DraftsResponse {
+  success: boolean;
+  drafts: Draft[];
 }
 
 // User interface

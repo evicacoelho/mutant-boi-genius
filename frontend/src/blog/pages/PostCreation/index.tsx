@@ -1,10 +1,10 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import ContentEditor from '../../components/ContentEditor';
 import './style.css';
 import { tagTypes } from '../../components/PostPreview';
 import { postsAPI } from '../../../services/api';
-import { Tag } from '../../../types';
+import { Tag, Draft } from '../../../types';
 import BackgroundImage from '../../../background.png'
 
 interface PostData {
@@ -23,11 +23,157 @@ const PostCreation: React.FC = () => {
     excerpt: '',
     tags: [],
   });
+  const [draftId, setDraftId] = useState<string | null>(null);
   const [newTag, setNewTag] = useState({ name: '', type: 'design' });
   const [generatedSlug, setGeneratedSlug] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSavingDraft, setIsSavingDraft] = useState(false);
   const [error, setError] = useState('');
+  const [draftLoaded, setDraftLoaded] = useState(false);
+  const [lastSaved, setLastSaved] = useState<Date | null>(null);
+  const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
+  
   const navigate = useNavigate();
+  const autoSaveTimeoutRef = useRef<NodeJS.Timeout | undefined>(undefined);
+  const isInitialMount = useRef(true);
+  const hasLoadedDraft = useRef(false);
+  const abortControllerRef = useRef<AbortController | null>(null);
+
+  // Load the latest draft on component mount
+    useEffect(() => {
+    // Only load draft once, even in StrictMode
+    if (!hasLoadedDraft.current) {
+      hasLoadedDraft.current = true;
+      loadLatestDraft();
+    }
+  }, []); 
+
+  // Auto-save functionality
+  const saveDraft = useCallback(async (force = false) => {
+    // Don't auto-save if there's no content at all (except maybe on force save)
+    if (!force && !postData.title && !postData.content && !postData.excerpt && postData.tags.length === 0) {
+      return;
+    }
+
+    // Don't save if already saving
+    if (isSavingDraft) return;
+
+    setIsSavingDraft(true);
+    setSaveStatus('saving');
+
+    try {
+      const draftToSave: any = {
+        title: postData.title,
+        content: postData.content,
+        excerpt: postData.excerpt,
+        tags: postData.tags,
+        featuredImage: postData.featuredImage,
+      };
+
+      // Include draftId if we have one (for updating existing draft)
+      if (draftId) {
+        draftToSave.draftId = draftId;
+      }
+
+      const response = await postsAPI.saveDraft(draftToSave);
+      
+      // If this is a new draft, store the draftId
+      if (!draftId && response.post && response.post.draftId) {
+        setDraftId(response.post.draftId);
+      } else if (response.post && response.post._id && !draftId) {
+        // Fallback to _id if draftId not available
+        setDraftId(response.post._id);
+      }
+      
+      setLastSaved(new Date());
+      setSaveStatus('saved');
+      
+      // Reset status after 3 seconds
+      setTimeout(() => {
+        setSaveStatus('idle');
+      }, 3000);
+    } catch (error) {
+      console.error('Error saving draft:', error);
+      setSaveStatus('error');
+    } finally {
+      setIsSavingDraft(false);
+    }
+  }, [postData, draftId, isSavingDraft]);
+
+  // Debounced auto-save
+  useEffect(() => {
+    // Skip auto-save on initial mount if we're loading a draft
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      return;
+    }
+
+    // Clear existing timeout
+    if (autoSaveTimeoutRef.current) {
+      clearTimeout(autoSaveTimeoutRef.current);
+    }
+
+    // Set new timeout for auto-save (2 seconds after last change)
+    autoSaveTimeoutRef.current = setTimeout(() => {
+      saveDraft();
+    }, 2000);
+
+    // Cleanup on unmount
+    return () => {
+      if (autoSaveTimeoutRef.current) {
+        clearTimeout(autoSaveTimeoutRef.current);
+      }
+    };
+  }, [postData, saveDraft]);
+
+  const loadLatestDraft = async () => {
+    try {
+      const response = await postsAPI.getLatestDraft();
+      
+      if (response.success && response.draft) {
+        const draft = response.draft;
+        
+        // Use updatedAt or lastAutoSaved or current time as fallback
+        const draftDate = draft.updatedAt || draft.lastAutoSaved || new Date().toISOString();
+        
+        // Confirm with user if they want to load the draft
+        const shouldLoadDraft = window.confirm(
+          'You have an unsaved draft from ' + 
+          new Date(draftDate).toLocaleString() + 
+          '. Would you like to continue editing it?'
+        );
+        
+        if (shouldLoadDraft) {
+          setPostData({
+            title: draft.title || '',
+            content: draft.content || '',
+            excerpt: draft.excerpt || '',
+            tags: draft.tags || [],
+            featuredImage: draft.featuredImage || BackgroundImage,
+            isFeatured: draft.isFeatured || false,
+          });
+          
+          // Store the draft ID for future updates
+          if (draft.draftId) {
+            setDraftId(draft.draftId);
+          } else {
+            setDraftId(draft._id || null);
+          }
+          
+          setDraftLoaded(true);
+          setLastSaved(new Date(draftDate));
+        }
+      }
+    } catch (error) {
+      console.error('Error loading draft:', error);
+      // Don't show error to user, just silently fail
+    }
+  };
+
+  // Manual save function
+  const handleManualSave = () => {
+    saveDraft(true);
+  };
 
   // Generate slug when title changes
   useEffect(() => {
@@ -44,7 +190,7 @@ const PostCreation: React.FC = () => {
     }
   }, [postData.title]);
 
-  // Generate excerpt from content
+  // Generate excerpt from content if not manually set
   useEffect(() => {
     if (postData.content && !postData.excerpt) {
       const plainText = postData.content.replace(/<[^>]*>/g, '');
@@ -95,38 +241,99 @@ const PostCreation: React.FC = () => {
         excerpt: postData.excerpt,
         tags: postData.tags,
         featuredImage: postData.featuredImage || BackgroundImage,
-        // Slug will be generated by backend if not provided
+        isFeatured: postData.isFeatured,
       };
 
       const createdPost = await postsAPI.createPost(postToSubmit);
       
-      alert('Post created successfully!');
+      // If we have a draft, delete it after successful publish
+      if (draftId) {
+        try {
+          await postsAPI.deleteDraft(draftId);
+        } catch (deleteError) {
+          console.error('Error deleting draft after publish:', deleteError);
+          // Non-critical error, don't block user
+        }
+      }
+      
+      alert('Post published successfully!');
       navigate(`/blog/${createdPost.slug}`);
       
     } catch (error: any) {
-      setError(error.message || 'Failed to create post. Please try again.');
-      console.error('Error creating post:', error);
+      setError(error.message || 'Failed to publish post. Please try again.');
+      console.error('Error publishing post:', error);
     } finally {
       setIsSubmitting(false);
     }
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('blog_auth_token');
-    navigate('/blog');
+    // Clear any pending auto-save
+    if (autoSaveTimeoutRef.current) {
+      clearTimeout(autoSaveTimeoutRef.current);
+    }
+    
+    // Save current state one last time before logout
+    if (postData.content || postData.title) {
+      saveDraft(true).then(() => {
+        localStorage.removeItem('blog_auth_token');
+        navigate('/blog');
+      }).catch(() => {
+        localStorage.removeItem('blog_auth_token');
+        navigate('/blog');
+      });
+    } else {
+      localStorage.removeItem('blog_auth_token');
+      navigate('/blog');
+    }
+  };
+
+  // Format last saved time
+  const getLastSavedText = () => {
+    if (!lastSaved) return '';
+    return `Last saved: ${lastSaved.toLocaleTimeString()}`;
+  };
+
+  // Get save status indicator
+  const getSaveStatusIndicator = () => {
+    switch (saveStatus) {
+      case 'saving':
+        return <span className="save-status saving">💾 Saving draft...</span>;
+      case 'saved':
+        return <span className="save-status saved">✓ Draft saved</span>;
+      case 'error':
+        return <span className="save-status error">✗ Failed to save</span>;
+      default:
+        return lastSaved ? <span className="save-status idle">{getLastSavedText()}</span> : null;
+    }
   };
 
   return (
     <div className="post-creation-page">
       <header className="creation-header">
-        <Link to="/blog" className="back-button">
-          ← Back to Blog
-        </Link>
-        <h1>Create New Post</h1>
+        <div className="header-top">
+          <Link to="/blog" className="back-button">
+            ← Back to Blog
+          </Link>
+          <button onClick={handleLogout} className="logout-button">
+            Logout
+          </button>
+        </div>
+        <h1>{draftLoaded ? 'Continue Editing Draft' : 'Create New Post'}</h1>
         <p>Share your thoughts and creativity with the world</p>
-        <button onClick={handleLogout} className="logout-button">
-          Logout
-        </button>
+        
+        {/* Save status bar */}
+        <div className="save-status-bar">
+          {getSaveStatusIndicator()}
+          <button 
+            type="button" 
+            onClick={handleManualSave} 
+            className="manual-save-button"
+            disabled={isSavingDraft || isSubmitting}
+          >
+            {isSavingDraft ? 'Saving...' : '💾 Save Draft Now'}
+          </button>
+        </div>
       </header>
 
       <form onSubmit={handleSubmit} className="post-form">
@@ -268,7 +475,15 @@ const PostCreation: React.FC = () => {
           <button 
             type="button" 
             className="draft-button"
-            onClick={() => navigate('/blog')}
+            onClick={() => {
+              if (window.confirm('Are you sure you want to cancel? Your draft will be saved.')) {
+                saveDraft(true).then(() => {
+                  navigate('/blog');
+                }).catch(() => {
+                  navigate('/blog');
+                });
+              }
+            }}
             disabled={isSubmitting}
           >
             Cancel

@@ -6,10 +6,15 @@ import {
   LoginRequest, 
   LoginResponse, 
   ContactFormData,
-  ApiResponse 
+  ApiResponse,
+  Draft,
+  DraftResponse,
+  LatestDraftResponse,
+  DraftsResponse
 } from '../types';
 
 const API_URL = process.env.REACT_APP_API_URL || 'https://mutant-boi-genius.onrender.com/api';
+
 // Helper function for API calls
 interface ApiRequestOptions extends RequestInit {
   headers?: Record<string, string>;
@@ -81,7 +86,7 @@ export const postsAPI = {
     limit?: number; 
     category?: string;
     search?: string;
-    includeFeatured? : boolean;
+    includeFeatured?: boolean;
   }): Promise<PaginatedResponse<Post>> => {
     const query = new URLSearchParams(params as any).toString();
     return apiRequest(`/posts?${query}`);
@@ -113,6 +118,24 @@ export const postsAPI = {
   toggleFeatured: (id: string): Promise<{ message: string; isFeatured: boolean }> => 
     apiRequest(`/posts/${id}/feature`, {
       method: 'PATCH',
+    }),
+
+  // Draft methods with proper typing
+  saveDraft: (draftData: Partial<Post> & { draftId?: string }): Promise<DraftResponse> => 
+    apiRequest('/posts/drafts', {
+      method: 'POST',
+      body: JSON.stringify(draftData),
+    }),
+
+  getLatestDraft: (): Promise<LatestDraftResponse> => 
+    apiRequest('/posts/drafts/latest'),
+
+  getAllDrafts: (): Promise<DraftsResponse> => 
+    apiRequest('/posts/drafts/all'),
+
+  deleteDraft: (id: string): Promise<{ success: boolean; message: string }> => 
+    apiRequest(`/posts/drafts/${id}`, {
+      method: 'DELETE',
     }),
 };
 

@@ -391,6 +391,76 @@ input:disabled + .toggle-slider {
   font-style: italic;
 }
 
+/* Save status bar */
+.save-status-bar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1rem;
+  padding: 0.5rem 1rem;
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.save-status {
+  font-size: 0.9rem;
+}
+
+.save-status.saving {
+  color: #ffd700;
+}
+
+.save-status.saved {
+  color: #4caf50;
+}
+
+.save-status.error {
+  color: #f44336;
+}
+
+.save-status.idle {
+  color: #888;
+}
+
+.manual-save-button {
+  padding: 0.4rem 1rem;
+  background-color: #4a4a4a;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.2s;
+}
+
+.manual-save-button:hover:not(:disabled) {
+  background-color: #5a5a5a;
+}
+
+.manual-save-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+/* Update existing styles */
+.creation-header {
+  margin-bottom: 2rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 1rem;
+}
+
+.creation-header h1 {
+  margin: 1rem 0 0.5rem;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .post-creation-page {

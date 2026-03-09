@@ -286,3 +286,147 @@ exports.getAllCategories = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+exports.saveDraft = async (req, res) => {
+  try {
+    const { title, content, excerpt, tags, featuredImage, draftId } = req.body;
+
+    let post;
+    let slug;
+
+    // If draftId is provided, update existing draft
+    if (draftId) {
+      post = await Post.findOne({ draftId, author: req.user._id, isDraft: true });
+      
+      if (!post) {
+        return res.status(404).json({ error: 'Draft not found' });
+      }
+
+      // Generate new slug if title changed
+      if (title && title !== post.title) {
+        slug = await generateUniqueSlug(Post, title, post._id);
+      }
+
+      // Update the draft
+      post.title = title || post.title;
+      if (slug) post.slug = slug;
+      post.content = content || post.content;
+      post.excerpt = excerpt || post.excerpt;
+      post.tags = tags || post.tags;
+      post.featuredImage = featuredImage !== undefined ? featuredImage : post.featuredImage;
+      post.lastAutoSaved = Date.now();
+      
+      await post.save();
+    } else {
+      // Create new draft
+      // Generate slug from title or use temporary slug
+      slug = title ? await generateUniqueSlug(Post, title) : `draft-${Date.now()}`;
+
+      // Generate a unique draftId
+      const newDraftId = `draft_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+
+      post = new Post({
+        title: title || 'Untitled Draft',
+        slug,
+        content: content || '',
+        excerpt: excerpt || '',
+        tags: tags || [],
+        featuredImage: featuredImage || '',
+        author: req.user._id,
+        isPublished: false,
+        isDraft: true,
+        draftId: newDraftId,
+        lastAutoSaved: Date.now()
+      });
+
+      await post.save();
+    }
+
+    // Populate author info
+    await post.populate('author', 'displayName username');
+
+    res.json({
+      success: true,
+      post,
+      isDraft: true,
+      message: 'Draft saved successfully'
+    });
+
+  } catch (error) {
+    console.error('Error saving draft:', error);
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// Get the latest draft for the current user
+exports.getLatestDraft = async (req, res) => {
+  try {
+    const draft = await Post.findOne({ 
+      author: req.user._id, 
+      isDraft: true 
+    })
+    .sort({ lastAutoSaved: -1, updatedAt: -1 })
+    .populate('author', 'displayName username')
+    .lean();
+
+    if (!draft) {
+      return res.json({ draft: null, message: 'No drafts found' });
+    }
+
+    res.json({
+      success: true,
+      draft
+    });
+
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// Get all drafts for the current user
+exports.getAllDrafts = async (req, res) => {
+  try {
+    const drafts = await Post.find({ 
+      author: req.user._id, 
+      isDraft: true 
+    })
+    .sort({ lastAutoSaved: -1, updatedAt: -1 })
+    .populate('author', 'displayName username')
+    .lean();
+
+    res.json({
+      success: true,
+      drafts
+    });
+
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// Delete a draft
+exports.deleteDraft = async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    const draft = await Post.findOne({ 
+      _id: id,
+      author: req.user._id,
+      isDraft: true 
+    });
+
+    if (!draft) {
+      return res.status(404).json({ error: 'Draft not found' });
+    }
+
+    await draft.deleteOne();
+    
+    res.json({
+      success: true,
+      message: 'Draft deleted successfully'
+    });
+
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};

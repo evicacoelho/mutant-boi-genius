@@ -63,18 +63,29 @@ const postSchema = new mongoose.Schema({
   isFeatured: {
     type: Boolean,
     default: false
+  },
+    isDraft: {
+    type: Boolean,
+    default: false
+  },
+  lastAutoSaved: {
+    type: Date,
+    default: null
+  },
+  draftId: {
+    type: String,
+    sparse: true // Allows multiple null values but unique for drafts
   }
 }, {
   timestamps: true
 });
 
-// FIXED: Updated middleware for Mongoose 7+
+
+
 postSchema.pre('save', function() {
   this.updatedAt = Date.now();
-  // No need to call next() in Mongoose 7+
 });
 
-// Virtual for formatted date
 postSchema.virtual('formattedDate').get(function() {
   return this.publishedAt.toLocaleDateString('en-US', {
     year: 'numeric',
