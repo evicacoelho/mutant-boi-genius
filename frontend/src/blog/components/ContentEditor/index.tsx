@@ -378,7 +378,7 @@ const ContentEditor: React.FC<ContentEditorProps> = ({
     e.preventDefault();
     
     // Tab key - insert 4 non-breaking spaces
-    const tabSpaces = '&nbsp;&nbsp;&nbsp;&nbsp;';
+    const tabSpaces = '                ';
     const newValue = 
       value.substring(0, start) + 
       tabSpaces + 
