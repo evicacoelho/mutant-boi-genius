@@ -8,24 +8,6 @@ A full-stack blog platform for creative expression, built with React/TypeScript 
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6)
 ![MongoDB](https://img.shields.io/badge/MongoDB-7.x-47A248)
 
-## ✨ Features
-
-### Frontend (React/TypeScript)
-- **Modern UI**: Glass-morphism design with blurred background effects
-- **Responsive Design**: Works on desktop, tablet, and mobile
-- **Category Navigation**: Side menu with nested categories (Arts, Essays, Resources)
-- **Search Functionality**: Real-time search across posts
-- **Post Management**: Create, edit, and delete posts with rich text editor
-- **Contact System**: Built-in contact form with email integration
-- **Authentication**: JWT-based admin login system
-
-### Backend (Node.js/Express/MongoDB)
-- **RESTful API**: Complete CRUD operations for posts
-- **JWT Authentication**: Secure admin access
-- **Email Integration**: Contact form with auto-replies
-- **Tag System**: Categorization with aggregator pages
-- **File Structure**: Organized MVC architecture
-
 ## 🏗️ Project Structure
 
 ```
@@ -191,58 +173,29 @@ REACT_APP_API_URL=http://localhost:5000/api
 ### Post Model
 ```javascript
 {
-  title: String,
-  slug: String,
-  content: String,
-  excerpt: String,
-  author: ObjectId,
-  tags: [{
-    name: String,
-    type: String // 'design', 'tattoo', 'painting', etc.
-  }],
-  isPublished: Boolean,
-  publishedAt: Date,
-  viewCount: Number
+  draftId?: string;
+  _id?: string;
+  id?: string;
+  title: string;
+  slug: string;
+  content: string;
+  excerpt: string;
+  author: {
+    _id?: string;
+    displayName: string;
+    username?: string;
+  };
+  tags: Tag[];
+  featuredImage?: string;
+  isPublished?: boolean;
+  publishedAt: Date | string;
+  updatedAt?: Date | string;
+  viewCount?: number;
+  date?: Date | string;
+  preview?: string;
+  isFeatured?: boolean;
 }
 ```
-
-## 🚀 Deployment
-
-### Backend Deployment Options
-1. **Railway.app** (Recommended - Free Tier Available)
-   ```bash
-   npm install -g @railway/cli
-   railway login
-   railway init
-   railway up
-   ```
-
-2. **Render.com**
-   - Create Web Service
-   - Connect GitHub repository
-   - Add MongoDB Atlas database
-
-3. **Vercel** (Serverless Functions)
-   - Add `vercel.json` configuration
-   - Deploy as serverless functions
-
-### Frontend Deployment Options
-1. **Vercel** (Recommended for React)
-   ```bash
-   yarn install -g vercel
-   vercel
-   ```
-
-2. **Netlify**
-   - Connect repository
-   - Set build command: `yarn build`
-   - Set publish directory: `build`
-
-3. **GitHub Pages**
-   ```bash
-   yarn build
-   yarn deploy
-   ```
 
 ### Environment Configuration for Production
 
@@ -261,17 +214,17 @@ JWT_SECRET=your_super_secret_jwt_key_change_this_in_production
 JWT_EXPIRE=7d
 
 # Admin User (set these initially)
-ADMIN_USERNAME=mutantboi
-ADMIN_EMAIL=yourboyfriend@email.com
+ADMIN_USERNAME=someusername
+ADMIN_EMAIL=someemail@email.com
 ADMIN_PASSWORD=changeme123
 
 # Email (for contact form)
 EMAIL_HOST=smtp.gmail.com
 EMAIL_PORT=587
-EMAIL_USER=your-email@gmail.com
+EMAIL_USER=useremail@example.com
 EMAIL_PASS=your-app-specific-password
-EMAIL_FROM=noreply@mutantboigenius.com
-EMAIL_TO=contact@mutantboigenius.com
+EMAIL_FROM=noreply@example.com
+EMAIL_TO=contact@example.com
 ```
 
 **Frontend Production (.env.production):**
@@ -383,25 +336,6 @@ Built with React, TypeScript, and passion.
    curl http://localhost:5000/api/health
    ```
 
-## 🎯 Future Enhancements
-
-### Planned Features
-- [ ] Comment system
-- [ ] User subscriptions
-- [ ] Newsletter integration
-- [ ] Analytics dashboard
-- [ ] SEO optimization
-- [ ] Dark mode toggle
-- [ ] Offline support (PWA)
-
-### Technical Improvements
-- [ ] Implement caching layer
-- [ ] Add comprehensive testing
-- [ ] Improve error logging
-- [ ] Add API documentation (Swagger)
-- [ ] Implement rate limiting
-- [ ] Add monitoring and alerts
-
 ## 🙏 Acknowledgments
 
 - Special thanks to all readers and supporters
@@ -409,5 +343,3 @@ Built with React, TypeScript, and passion.
 - Built with open-source technologies
 
 ---
-
-**Note**: This project is for personal/educational use. For production deployment, consider adding additional security measures, monitoring, and backup solutions.
